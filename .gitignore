@@ -1,5 +1,8 @@
 /node_modules
+<<<<<<< HEAD
 /UI/node_modules
+=======
+>>>>>>> 1c25b44 (Init Project)
 /public/build
 /public/hot
 /public/storage

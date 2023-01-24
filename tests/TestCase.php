@@ -15,7 +15,6 @@ use Faker\Factory as Faker;
  */
 abstract class TestCase extends BaseTestCase
 {
-    // use CreatesApplication, DatabaseMigrations, DatabaseTransactions, RefreshDatabaseWithData;
     use CreatesApplication, DatabaseMigrations, RefreshDatabaseWithData;
 
     protected $faker;
@@ -35,6 +34,5 @@ abstract class TestCase extends BaseTestCase
     public function tearDown(): void
     {
         $this->artisan('migrate:reset');
-        // parent::tearDown();
     }
 }

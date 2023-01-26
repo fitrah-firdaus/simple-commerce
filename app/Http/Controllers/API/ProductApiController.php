@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateProductRequest;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +26,7 @@ class ProductApiController extends Controller
      * @param  CreateProductRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateProductRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
         $input['web_id'] =Str::uuid()->toString();

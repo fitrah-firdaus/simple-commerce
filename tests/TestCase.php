@@ -15,7 +15,7 @@ use Faker\Factory as Faker;
  */
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication, DatabaseMigrations, RefreshDatabaseWithData;
+    use CreatesApplication, DatabaseMigrations;
 
     protected $faker;
 

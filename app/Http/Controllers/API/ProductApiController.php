@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
+use function Psy\debug;
+
 class ProductApiController extends Controller
 {
     /**
@@ -40,7 +42,6 @@ class ProductApiController extends Controller
     {
         $input = $request->all();
         $input['web_id'] = Str::uuid()->toString();
-        Log::info(print_r($input, true));
         return response()->json(['data' => Products::create($input)], 201);
     }
 
@@ -53,6 +54,20 @@ class ProductApiController extends Controller
     public function show(Products $products)
     {
         //
+    }
+
+    public function showById($id)
+    {
+        Log::info("id = ".$id);
+        $product = DB::table('products')
+                        ->where('web_id', $id)
+                        ->get();
+
+        Log::debug("Product = ".$product);
+        return response()->json([
+            'data' => $product,
+            'message' => 'Data Retrieved Successfully'
+        ]);
     }
 
     /**

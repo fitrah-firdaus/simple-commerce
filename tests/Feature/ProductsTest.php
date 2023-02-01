@@ -79,4 +79,30 @@ class ProductsTest extends TestCase
                 "message" => "Data Retrieved Successfully"
             ]);
     }
+
+    public function testShowProductById()
+    {
+        $products = Products::factory()->count(15)->create();
+
+        $id = $products[0]['web_id'];
+        $products[0]['id'] = 1;
+
+        $expected['id'] = 1;
+        $expected['product_title'] = $products[0]['product_title'];
+        $expected['image_url'] = $products[0]['image_url'];
+        $expected['price'] = $products[0]['price'];
+        $expected['web_id'] = $products[0]['web_id'];
+        $expected['rating'] = $products[0]['rating'];
+        $expected['category'] = $products[0]['category'];
+        $expected['is_deleted'] = $products[0]['is_deleted'];
+
+        print("id = " . $id);
+        $this->json('GET', '/api/v1/products/' . $id . '/show', ['Accept' => 'application/json'])
+            ->dump()
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [$expected],
+                "message" => "Data Retrieved Successfully"
+            ]);
+    }
 }

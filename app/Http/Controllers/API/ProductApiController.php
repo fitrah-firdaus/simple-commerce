@@ -8,6 +8,7 @@ use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class ProductApiController extends Controller
 {
@@ -16,9 +17,17 @@ class ProductApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $limit = $request->input('limit');
+
+        $products = Products::paginate($limit);
+
+        return response()->json([
+            'data' => $products->items(),
+            'total_page' => $products->lastPage(),
+            'message' => 'Data Retrieved Successfully'
+        ]);
     }
 
     /**
@@ -30,7 +39,7 @@ class ProductApiController extends Controller
     public function store(CreateProductRequest $request)
     {
         $input = $request->all();
-        $input['web_id'] =Str::uuid()->toString();
+        $input['web_id'] = Str::uuid()->toString();
         Log::info(print_r($input, true));
         return response()->json(['data' => Products::create($input)], 201);
     }

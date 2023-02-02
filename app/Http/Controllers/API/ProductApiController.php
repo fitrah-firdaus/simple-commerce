@@ -51,13 +51,10 @@ class ProductApiController extends Controller
      */
     public function show($id)
     {
-        //
-        Log::info("id = ".$id);
         $product = DB::table('products')
-                        ->where('web_id', $id)
-                        ->get();
+            ->where('web_id', $id)
+            ->get();
 
-        Log::debug("Product = ".$product);
         return response()->json([
             'data' => $product,
             'message' => 'Data Retrieved Successfully'
@@ -71,9 +68,28 @@ class ProductApiController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Products $products)
+    public function update(Request $request, $id)
     {
-        //
+        $product = Products::where('web_id', $id);
+
+        $updated = [];
+
+        if (!empty($request->input('product_title'))) {
+            $updated['product_title'] =  $request->input('product_title');
+        }
+
+        if (!empty($request->input('price'))) {
+            $updated['price'] = $request->input('price');
+        }
+
+        if (!empty($request->input('rating'))) {
+            $updated['rating'] = $request->input('rating');
+        }
+
+        Log::info("Update Data" . serialize($updated));
+        $product->update($updated);
+
+        return response()->json([], 204);
     }
 
     /**

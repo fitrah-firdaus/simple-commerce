@@ -22,4 +22,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1'], function () {
   Route::resource('products', ProductApiController::class);
 });
-Route::get('/v1/products/{id}/show', [ProductApiController::class, 'showById']);

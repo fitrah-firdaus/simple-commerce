@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 define("ACCEPT_MIME_TYPE", "application/json");
 define("DEFAULT_MESSAGE", "Data Retrieved Successfully");
+define("PRODUCT_URL", "/api/v1/products");
 class ProductsTest extends TestCase
 {
     /** @test */
@@ -99,7 +100,40 @@ class ProductsTest extends TestCase
         $expected['is_deleted'] = $products[0]['is_deleted'];
 
         print("id = " . $id);
-        $this->json('GET', '/api/v1/products/' . $id, ['Accept' => 'application/json'])
+        $this->json('GET', PRODUCT_URL . "/" . $id, ['Accept' => ACCEPT_MIME_TYPE])
+            ->dump()
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [$expected],
+                "message" => "Data Retrieved Successfully"
+            ]);
+    }
+
+    public function testUpdateProducts()
+    {
+        $products = Products::factory()->count(20)->create();
+
+        $id = $products[6]['web_id'];
+
+        $data = [
+            'product_title' => 'Keyboard Keychron',
+            'price' => 2.5,
+            'rating' => 3.4
+        ];
+
+        $this->put(PRODUCT_URL . "/" . $id, $data)
+            ->assertStatus(204);
+
+        $expected['id'] = 7;
+        $expected['product_title'] = $data['product_title'];
+        $expected['image_url'] = $products[6]['image_url'];
+        $expected['price'] = $data['price'];
+        $expected['web_id'] = $products[6]['web_id'];
+        $expected['rating'] = $data['rating'];
+        $expected['category'] = $products[6]['category'];
+        $expected['is_deleted'] = $products[6]['is_deleted'];
+
+        $this->json('GET', PRODUCT_URL . "/" . $id, ['Accept' => ACCEPT_MIME_TYPE])
             ->dump()
             ->assertStatus(200)
             ->assertJson([

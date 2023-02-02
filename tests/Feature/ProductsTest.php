@@ -5,6 +5,8 @@ use Tests\TestCase;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Log;
 
+define("ACCEPT_MIME_TYPE", "application/json");
+define("DEFAULT_MESSAGE", "Data Retrieved Successfully");
 class ProductsTest extends TestCase
 {
     /** @test */
@@ -50,33 +52,33 @@ class ProductsTest extends TestCase
 
         $productFirst10 = $this->generateProductPerPage(1, 10, $products);
 
-        $this->json('GET', '/api/v1/products?limit=10&page=1', ['Accept' => 'application/json'])
+        $this->json('GET', '/api/v1/products?limit=10&page=1', ['Accept' => ACCEPT_MIME_TYPE])
             ->dump()
             ->assertStatus(200)
             ->assertJson([
                 "data" => $productFirst10,
                 "total_page" => 3,
-                "message" => "Data Retrieved Successfully"
+                "message" => DEFAULT_MESSAGE
             ]);
 
         $productSecond10 = $this->generateProductPerPage(2, 10, $products);
-        $this->json('GET', '/api/v1/products?limit=10&page=2', ['Accept' => 'application/json'])
+        $this->json('GET', '/api/v1/products?limit=10&page=2', ['Accept' => ACCEPT_MIME_TYPE])
             ->dump()
             ->assertStatus(200)
             ->assertJson([
                 "data" => $productSecond10,
                 "total_page" => 3,
-                "message" => "Data Retrieved Successfully"
+                "message" => DEFAULT_MESSAGE
             ]);
 
         $productThird10 = $this->generateProductPerPage(3, 10, $products);
-        $this->json('GET', '/api/v1/products?limit=10&page=3', ['Accept' => 'application/json'])
+        $this->json('GET', '/api/v1/products?limit=10&page=3', ['Accept' => ACCEPT_MIME_TYPE])
             ->dump()
             ->assertStatus(200)
             ->assertJson([
                 "data" => $productThird10,
                 "total_page" => 3,
-                "message" => "Data Retrieved Successfully"
+                "message" => DEFAULT_MESSAGE
             ]);
     }
 
@@ -97,12 +99,12 @@ class ProductsTest extends TestCase
         $expected['is_deleted'] = $products[0]['is_deleted'];
 
         print("id = " . $id);
-        $this->json('GET', '/api/v1/products/' . $id . '/show', ['Accept' => 'application/json'])
+        $this->json('GET', '/api/v1/products/' . $id, ['Accept' => 'application/json'])
             ->dump()
             ->assertStatus(200)
             ->assertJson([
                 "data" => [$expected],
-                "message" => "Data Retrieved Successfully"
+                "message" => DEFAULT_MESSAGE
             ]);
     }
 }

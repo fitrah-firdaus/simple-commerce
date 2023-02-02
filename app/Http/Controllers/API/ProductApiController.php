@@ -51,13 +51,9 @@ class ProductApiController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function show(Products $products)
+    public function show($id)
     {
         //
-    }
-
-    public function showById($id)
-    {
         Log::info("id = ".$id);
         $product = DB::table('products')
                         ->where('web_id', $id)

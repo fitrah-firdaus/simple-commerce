@@ -98,8 +98,16 @@ class ProductApiController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Products $products)
+    public function destroy($webId)
     {
-        //
+        Log::info("web_id = " . $webId);
+        $product = Products::where('web_id', $webId);
+
+        $updated = [];
+        $updated['is_deleted'] = true;
+
+        $product->update($updated);
+
+        return response()->json([], 204);
     }
 }

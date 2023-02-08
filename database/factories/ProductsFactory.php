@@ -17,13 +17,15 @@ class ProductsFactory extends Factory
      */
     public function definition()
     {
+        $input = array("Keyboards", "Headphones", "Kitchen", "Shoes", "Sweat", "Wallet", "Jacket", "Adidas");
+        $randKeys = array_rand($input, 2);
         return [
-            'product_title' => fake()->jobTitle(),
+            'product_title' => fake()->word(4, true),
             'image_url' => fake()->url(),
             'web_id' => Str::uuid()->toString(),
             'price' => fake()->randomFloat(2, 0, 3),
             'rating' => fake()->randomFloat(1, 0, 1),
-            'category' => fake()->name(),
+            'category' => $input[$randKeys[0]],
             'is_deleted' => false
         ];
     }

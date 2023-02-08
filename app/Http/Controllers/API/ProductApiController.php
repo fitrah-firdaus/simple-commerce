@@ -21,7 +21,13 @@ class ProductApiController extends Controller
     {
         $limit = $request->input('limit');
 
-        $products = Products::where("is_deleted", false)->paginate($limit);
+        $products = Products::where("is_deleted", false);
+
+        if (!empty($request->input("keyword"))) {
+            $products->where("category", $request->input("keyword"));
+        }
+
+        $products = $products->paginate($limit);
 
         return response()->json([
             'data' => $products->items(),

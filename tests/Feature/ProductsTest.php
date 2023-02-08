@@ -141,4 +141,32 @@ class ProductsTest extends TestCase
                 "message" => DEFAULT_MESSAGE
             ]);
     }
+
+    public function testDeleteProduct()
+    {
+        $products = Products::factory()->count(20)->create();
+
+        $id = $products[6]['web_id'];
+
+        $this->delete(PRODUCT_URL . "/" . $id)
+            ->assertStatus(204);
+
+
+        $expected['id'] = 7;
+        $expected['product_title'] = $products[6]['product_title'];
+        $expected['image_url'] = $products[6]['image_url'];
+        $expected['price'] = $products[6]['price'];
+        $expected['web_id'] = $products[6]['web_id'];
+        $expected['rating'] = $products[6]['rating'];
+        $expected['category'] = $products[6]['category'];
+        $expected['is_deleted'] = true;
+
+        $this->json('GET', PRODUCT_URL . "/" . $id, ['Accept' => ACCEPT_MIME_TYPE])
+            ->dump()
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [$expected],
+                "message" => DEFAULT_MESSAGE
+            ]);
+    }
 }

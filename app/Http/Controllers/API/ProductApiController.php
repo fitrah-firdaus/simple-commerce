@@ -20,7 +20,6 @@ class ProductApiController extends Controller
     public function index(Request $request)
     {
         $limit = $request->input('limit');
-
         $products = Products::where("is_deleted", false);
 
         if (!empty($request->input("keyword"))) {
@@ -60,7 +59,6 @@ class ProductApiController extends Controller
         $product = DB::table('products')
             ->where('web_id', $id)
             ->get();
-
         return response()->json([
             'data' => $product,
             'message' => 'Data Retrieved Successfully'

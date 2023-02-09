@@ -1,8 +1,12 @@
 <?php
 
+use App\Models\Products;
 use Tests\TestCase;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Log;
 
+define("ACCEPT_MIME_TYPE", "application/json");
+define("DEFAULT_MESSAGE", "Data Retrieved Successfully");
 class ProductsTest extends TestCase
 {
     /** @test */
@@ -22,5 +26,85 @@ class ProductsTest extends TestCase
             ->dump()
             ->assertStatus(201)
             ->assertJson(compact('data'));
+    }
+
+    private function generateProductPerPage(int $page, int $perPage, $products)
+    {
+        $result = [];
+        $count = 0;
+        for ($i = ($perPage * $page - $perPage); $i < ($perPage * $page); $i++) {
+            $result[$count]["id"] = $i + 1;
+            $result[$count]["product_title"] = $products[$i]["product_title"];
+            $result[$count]["image_url"] = $products[$i]["image_url"];
+            $result[$count]["price"] = $products[$i]["price"];
+            $result[$count]["web_id"] = $products[$i]["web_id"];
+            $result[$count]["rating"] = $products[$i]["rating"];
+            $result[$count]["category"] = $products[$i]["category"];
+            $result[$count]["is_deleted"] = $products[$i]["is_deleted"];
+            $count++;
+        }
+        return $result;
+    }
+
+    public function testRetrieveProduct()
+    {
+        $products = Products::factory()->count(30)->create();
+
+        $productFirst10 = $this->generateProductPerPage(1, 10, $products);
+
+        $this->json('GET', '/api/v1/products?limit=10&page=1', ['Accept' => ACCEPT_MIME_TYPE])
+            ->dump()
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => $productFirst10,
+                "total_page" => 3,
+                "message" => DEFAULT_MESSAGE
+            ]);
+
+        $productSecond10 = $this->generateProductPerPage(2, 10, $products);
+        $this->json('GET', '/api/v1/products?limit=10&page=2', ['Accept' => ACCEPT_MIME_TYPE])
+            ->dump()
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => $productSecond10,
+                "total_page" => 3,
+                "message" => DEFAULT_MESSAGE
+            ]);
+
+        $productThird10 = $this->generateProductPerPage(3, 10, $products);
+        $this->json('GET', '/api/v1/products?limit=10&page=3', ['Accept' => ACCEPT_MIME_TYPE])
+            ->dump()
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => $productThird10,
+                "total_page" => 3,
+                "message" => DEFAULT_MESSAGE
+            ]);
+    }
+
+    public function testShowProductById()
+    {
+        $products = Products::factory()->count(15)->create();
+
+        $id = $products[0]['web_id'];
+        $products[0]['id'] = 1;
+
+        $expected['id'] = 1;
+        $expected['product_title'] = $products[0]['product_title'];
+        $expected['image_url'] = $products[0]['image_url'];
+        $expected['price'] = $products[0]['price'];
+        $expected['web_id'] = $products[0]['web_id'];
+        $expected['rating'] = $products[0]['rating'];
+        $expected['category'] = $products[0]['category'];
+        $expected['is_deleted'] = $products[0]['is_deleted'];
+
+        print("id = " . $id);
+        $this->json('GET', '/api/v1/products/' . $id, ['Accept' => 'application/json'])
+            ->dump()
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [$expected],
+                "message" => DEFAULT_MESSAGE
+            ]);
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 define("ACCEPT_MIME_TYPE", "application/json");
 define("DEFAULT_MESSAGE", "Data Retrieved Successfully");
 define("PRODUCT_URL", "/api/v1/products");
+
 class ProductsTest extends TestCase
 {
     /** @test */

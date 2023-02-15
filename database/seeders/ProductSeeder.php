@@ -3,10 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Products;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
 
 class ProductSeeder extends Seeder
 {

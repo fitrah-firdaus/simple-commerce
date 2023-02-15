@@ -16,13 +16,9 @@ const MainProducts = () => {
     dispatch(uiActions.openSpinner());
     try {
       const response = await fetch(
-        `https://kohls.p.rapidapi.com/products/list?limit=10&offset=1&keyword=${productCategory}`,
+        `http://127.0.0.1:8000/api/v1/products?limit=6&page=1&keyword=${productCategory}`,
         {
           method: "GET",
-          headers: {
-            "x-rapidapi-host": "kohls.p.rapidapi.com",
-            "x-rapidapi-key": APIKEY,
-          },
         }
       );
 
@@ -31,15 +27,15 @@ const MainProducts = () => {
       }
 
       const data = await response.json();
-      const formedData = data.payload.products || [];
+      const formedData = data.data || [];
       const apiDataObj = formedData.map((data, index) => {
         return {
-          id: index,
-          title: data.productTitle,
-          image: data.image.url,
-          price: data.prices[0].regularPrice.minPrice,
-          webID: data.webID,
-          rating: data.rating.avgRating,
+            id: index,
+            title: data.product_title,
+            image: data.image_url,
+            price: data.price,
+            webID: data.web_id,
+            rating: data.rating,
         };
       });
 
@@ -56,19 +52,19 @@ const MainProducts = () => {
   };
 
   const productOne = () => {
-    productHandler("sweat", "4552010");
+    productHandler("sweat", "971a4692-aca6-4958-8de8-62ecb84ed1b5");
   };
 
   const productTwo = () => {
-    productHandler("wallet", "3028377");
+    productHandler("wallet", "12a05838-48d2-4cf7-ae8f-94b3b43d217b");
   };
 
   const productThree = () => {
-    productHandler("jacket", "4936325");
+    productHandler("jacket", "95ab0a96-7a6b-4952-a618-8320529230f0");
   };
 
   const productFour = () => {
-    productHandler("adidas", "4484489");
+    productHandler("shoes", "fedcf3ea-062f-4705-8a4d-b77d1d1b4e79");
   };
 
   return (

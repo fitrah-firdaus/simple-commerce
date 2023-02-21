@@ -12,6 +12,7 @@ const Cart = () => {
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
 
+  console.log("total Price = " + totalPrice);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,7 +24,7 @@ const Cart = () => {
     dispatch(uiActions.closePayment());
   }
 
-  const formedTotalPrice = totalPrice.toFixed(2);
+  const formedTotalPrice = totalPrice;
 
   const checkoutButtonHandler = () => {
     if (!user) {

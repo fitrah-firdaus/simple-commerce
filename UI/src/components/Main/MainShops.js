@@ -17,13 +17,9 @@ const MainShops = () => {
     dispatch(uiActions.openSpinner());
     try {
       const response = await fetch(
-        `https://kohls.p.rapidapi.com/products/list?limit=24&offset=1&keyword=${productCategory}`,
+        `http://127.0.0.1:8000/api/v1/products?limit=6&page=1&keyword=${productCategory}`,
         {
           method: "GET",
-          headers: {
-            "x-rapidapi-host": "kohls.p.rapidapi.com",
-            "x-rapidapi-key": APIKEY,
-          },
         }
       );
 
@@ -32,15 +28,15 @@ const MainShops = () => {
       }
 
       const data = await response.json();
-      const formedData = data.payload.products || [];
+      const formedData = data.data || [];
       const apiDataObj = formedData.map((data, index) => {
         return {
           id: index,
-          title: data.productTitle,
-          image: data.image.url,
-          price: data.prices[0].regularPrice.minPrice,
-          webID: data.webID,
-          rating: data.rating.avgRating,
+          title: data.product_title,
+          image: data.image_url,
+          price: data.price,
+          webID: data.web_id,
+          rating: data.rating,
         };
       });
 
@@ -57,11 +53,11 @@ const MainShops = () => {
   };
 
   const productListOne = () => {
-    productListHandler("keyboard");
+    productListHandler("keyboards");
   };
 
   const productListTwo = () => {
-    productListHandler("headphone");
+    productListHandler("headphones");
   };
 
   const productListThree = () => {
@@ -69,7 +65,7 @@ const MainShops = () => {
   };
 
   const productListFour = () => {
-    productListHandler("shoe");
+    productListHandler("shoes");
   };
 
   return (

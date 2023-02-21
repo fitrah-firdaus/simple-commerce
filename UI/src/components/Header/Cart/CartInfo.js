@@ -38,7 +38,7 @@ const CartInfo = ({ item }) => {
             </div>
           </div>
         </div>
-        <h2 className="cartInfo__totalPrice">${item.total.toFixed(2)}</h2>
+        <h2 className="cartInfo__totalPrice">${item.total}</h2>
       </div>
     </div>
   );

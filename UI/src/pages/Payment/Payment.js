@@ -108,22 +108,22 @@ const Payment = () => {
 
   let previousPrice;
   let getSelectedTime;
-  let totalPriceAfterAddedShippingCost = +totalPrice.toFixed(2);
+  let totalPriceAfterAddedShippingCost = +totalPrice;
 
   if (shipping === "standard") {
     getSelectedTime = getCargoTime;
-    previousPrice = (totalPrice + 15).toFixed(2);
+    previousPrice = (totalPrice + 15);
   } else if (shipping === "priority") {
     getSelectedTime = getEarlyCargoDate;
-    previousPrice = (totalPrice + 30.99).toFixed(2);
-    totalPriceAfterAddedShippingCost = +totalPrice.toFixed(2) + 15.99;
+    previousPrice = (totalPrice + 30.99);
+    totalPriceAfterAddedShippingCost = +totalPrice + 15.99;
   }
 
   let allItemsPrice;
   if (promotionComponentShow === true) {
-    allItemsPrice = (totalPrice + 15).toFixed(2);
+    allItemsPrice = (totalPrice + 15);
   } else {
-    allItemsPrice = totalPrice.toFixed(2);
+    allItemsPrice = totalPrice;
   }
 
   const isEmpty = (value) => value.trim() === "";

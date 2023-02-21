@@ -14,7 +14,7 @@ const ProductDetail = () => {
 
   const data = apiData.find((item) => item.webID === params.product);
 
- 
+
 
   const addToCartHandler = () => {
     dispatch(

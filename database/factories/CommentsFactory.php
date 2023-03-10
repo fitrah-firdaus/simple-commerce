@@ -19,7 +19,7 @@ class CommentsFactory extends Factory
     {
         return [
             'username' => fake()->firstName(),
-            'web_id' => Str::uuid()->toString(),
+            'web_id' => '5bc821ef-dc5a-4478-8bdc-b57b7c6ad2ab',
             'comment' => fake()->paragraph(),
             'is_deleted' => false
         ];

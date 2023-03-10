@@ -19,7 +19,12 @@ class CommentsApiController extends Controller
     public function index(Request $request)
     {
         $limit = $request->input('limit');
-        $comments = Comments::where("is_deleted", false)->paginate($limit);
+        $webId = $request->input('web_id');
+
+        $comments = Comments::where("is_deleted", false);
+        $comments->where("web_id", $webId);
+
+        $comments = $comments->paginate($limit);
 
         return response()->json([
             'data' => $comments->items(),
@@ -37,7 +42,12 @@ class CommentsApiController extends Controller
     public function store(CreateCommentRequest $request)
     {
         $input = $request->all();
-        return response()->json(['data' => Comments::create($input)], 201);
+        return response()->json(
+            [
+                'data' => Comments::create($input)
+            ],
+            201
+        );
     }
 
     /**
@@ -70,7 +80,7 @@ class CommentsApiController extends Controller
 
         $updated = [];
 
-        if (!empty($request->input('comment'))){
+        if (!empty($request->input('comment'))) {
             $updated['comment'] = $request->input('comment');
         }
 

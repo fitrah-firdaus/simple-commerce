@@ -18,7 +18,8 @@ class CommentTest extends TestCase
      *
      * @return void
      */
-    public function testCreateComment() {
+    public function testCreateComment()
+    {
         $faker = Faker::create();
         $data = [
             'username' => $faker->firstName(),
@@ -31,26 +32,43 @@ class CommentTest extends TestCase
             ->assertStatus(201);
     }
 
-    private function generateCommentsPerPage(int $page, int $perPage, $comments) {
+    private function generateCommentsPerPage(
+        int $page,
+        int $perPage,
+        $comments
+    ) {
         $result = [];
         $count = 0;
-        for ($i = ($perPage * $page - $perPage); $i < ($perPage * $page); $i++) {
+        for (
+            $i = ($perPage * $page - $perPage);
+            $i < ($perPage * $page);
+            $i++
+        ) {
             $result[$count]["id"] = $i + 1;
             $result[$count]["web_id"] = $comments[$i]["web_id"];
             $result[$count]["username"] = $comments[$i]["username"];
             $result[$count]["comment"] = $comments[$i]["comment"];
-            $result[$count]["is_deleted"] = $comments[$i]["is_deleted"];
+            $result[$count]["is_deleted"]
+                = $comments[$i]["is_deleted"];
             $count++;
         }
 
         return $result;
     }
 
-    public function testRetrieveComments() {
+    public function testRetrieveComments()
+    {
         $comments = Comments::factory()->count(30)->create();
 
-        $commentsFirst10 = $this->generateCommentsPerPage(1, 10, $comments);
-        $this->json('GET', COMMENT_URL.'?limit=10&page=1', ['Accept' => ACCEPT_MIME_TYPE])
+        $webId = "5bc821ef-dc5a-4478-8bdc-b57b7c6ad2ab";
+
+        $commentsFirst10 = $this->generateCommentsPerPage(
+            1,
+            10,
+            $comments
+        );
+        $this->json('GET', COMMENT_URL . '?limit=10&page=1&web_id='
+            . $webId, ['Accept' => ACCEPT_MIME_TYPE])
             ->dump()
             ->assertStatus(200)
             ->assertJson([
@@ -59,8 +77,13 @@ class CommentTest extends TestCase
                 "message" => DEFAULT_MESSAGE
             ]);
 
-        $commentsSecond10 = $this->generateCommentsPerPage(2, 10, $comments);
-        $this->json('GET', COMMENT_URL.'?limit=10&page=2', ['Accept' => ACCEPT_MIME_TYPE])
+        $commentsSecond10 = $this->generateCommentsPerPage(
+            2,
+            10,
+            $comments
+        );
+        $this->json('GET', COMMENT_URL . '?limit=10&page=2&web_id='
+            . $webId, ['Accept' => ACCEPT_MIME_TYPE])
             ->dump()
             ->assertStatus(200)
             ->assertJson([
@@ -69,8 +92,13 @@ class CommentTest extends TestCase
                 "message" => DEFAULT_MESSAGE
             ]);
 
-       $commentsThird10 = $this->generateCommentsPerPage(3, 10, $comments);
-        $this->json('GET', COMMENT_URL.'?limit=10&page=3', ['Accept' => ACCEPT_MIME_TYPE])
+        $commentsThird10 = $this->generateCommentsPerPage(
+            3,
+            10,
+            $comments
+        );
+        $this->json('GET', COMMENT_URL . '?limit=10&page=3&web_id='
+            . $webId, ['Accept' => ACCEPT_MIME_TYPE])
             ->dump()
             ->assertStatus(200)
             ->assertJson([
@@ -80,7 +108,8 @@ class CommentTest extends TestCase
             ]);
     }
 
-    public function testShowCommentById() {
+    public function testShowCommentById()
+    {
         $comments = Comments::factory()->count(15)->create();
 
         $expected['id'] = 1;
@@ -88,7 +117,11 @@ class CommentTest extends TestCase
         $expected['is_deleted'] = $comments[0]['is_deleted'];
         $expected['username'] = $comments[0]['username'];
 
-        $this->json('GET', COMMENT_URL . "/1", ['Accept' => ACCEPT_MIME_TYPE])
+        $this->json(
+            'GET',
+            COMMENT_URL . "/1",
+            ['Accept' => ACCEPT_MIME_TYPE]
+        )
             ->dump()
             ->assertStatus(200)
             ->assertJson([
@@ -97,7 +130,8 @@ class CommentTest extends TestCase
             ]);
     }
 
-    public function testUpdateComments() {
+    public function testUpdateComments()
+    {
         $comments = Comments::factory()->count(20)->create();
 
         $id = 6;

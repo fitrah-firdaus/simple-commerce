@@ -24,7 +24,6 @@ class CreateCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
             'username' => ['required'],
             'web_id' => ['required'],
             'comment' => ['required']

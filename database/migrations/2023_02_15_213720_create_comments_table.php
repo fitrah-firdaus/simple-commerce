@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("username", 255);
             $table->text("comment");
-            $table->string("web_id");
+            $table->string("web_id", 50);
             $table->boolean("is_deleted")->default(false);
             $table->timestamps();
         });

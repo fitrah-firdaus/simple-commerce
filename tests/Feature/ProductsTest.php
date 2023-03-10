@@ -30,11 +30,13 @@ class ProductsTest extends TestCase
             ->assertJson(compact('data'));
     }
 
-    private function generateProductPerPage(int $page, int $perPage, $products)
+    private function generateProductPerPage(int $page, int $perPage,
+    $products)
     {
         $result = [];
         $count = 0;
-        for ($i = ($perPage * $page - $perPage); $i < ($perPage * $page); $i++) {
+        for ($i = ($perPage * $page - $perPage);
+        $i < ($perPage * $page); $i++) {
             $result[$count]["id"] = $i + 1;
             $result[$count]["product_title"] = $products[$i]["product_title"];
             $result[$count]["image_url"] = $products[$i]["image_url"];

@@ -4,7 +4,7 @@ import { useStateValue } from "../../store/AuthContext/authContext";
 
 import "./AddComment.css";
 
-const FIREBASE_DOMAIN = "https://e-commerce-e76f2-default-rtdb.firebaseio.com/";
+const FIREBASE_DOMAIN = "http://127.0.0.1:8000/api/v1";
 
 const AddComment = ({ webID, fetchCommentHandler }) => {
   const [commentInput, setCommentInput] = useState();
@@ -15,11 +15,12 @@ const AddComment = ({ webID, fetchCommentHandler }) => {
     event.preventDefault();
 
     if (user) {
-      await fetch(`${FIREBASE_DOMAIN}/comments/${webID}.json`, {
+      await fetch(`${FIREBASE_DOMAIN}/comments`, {
         method: "POST",
         body: JSON.stringify({
-          name: user.displayName,
+          username: user.displayName,
           comment: commentInput,
+          web_id: webID,
         }),
         headers: {
           "Content-Type": "application/json",

@@ -5,21 +5,21 @@ import Comment from "./Comment";
 
 import "./Comments.css";
 
-const FIREBASE_DOMAIN = "https://e-commerce-e76f2-default-rtdb.firebaseio.com/";
+const FIREBASE_DOMAIN = "http://127.0.0.1:8000/api/v1";
 
 const Comments = ({ webID }) => {
   const [comments, setComments] = useState([]);
 
   const fetchCommentHandler = useCallback(async () => {
     try {
-      const response = await fetch(`${FIREBASE_DOMAIN}/comments/${webID}.json`);
+      const response = await fetch(`${FIREBASE_DOMAIN}/comments?limit=6&web_id=${webID}`);
 
       if (!response.ok) {
         throw new Error("Could not get comments.");
       }
 
-      const responseData = await response.json();
-      
+      const responseData = await response.json().data;
+
 
       const transformedComments = [];
 
@@ -27,7 +27,7 @@ const Comments = ({ webID }) => {
         const commentObj = {
           id: key,
           comment: responseData[key].comment,
-          name: responseData[key].name,
+          name: responseData[key].username,
         };
 
         transformedComments.push(commentObj);

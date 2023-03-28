@@ -18,20 +18,21 @@ const Comments = ({ webID }) => {
         throw new Error("Could not get comments.");
       }
 
-      const responseData = await response.json().data;
+      const responseData = await response.json();
+      const formedData = responseData.data || [];
 
 
       const transformedComments = [];
 
-      for (const key in responseData) {
+      // eslint-disable-next-line array-callback-return
+      formedData.map((data, index) => {
         const commentObj = {
-          id: key,
-          comment: responseData[key].comment,
-          name: responseData[key].username,
+          id: index,
+          comment: data.comment,
+          name: data.username,
         };
-
         transformedComments.push(commentObj);
-      }
+      });
       setComments(transformedComments);
     } catch (error) {
       alert(error)
